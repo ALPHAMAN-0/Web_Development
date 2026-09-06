@@ -1,15 +1,21 @@
-# CLAUDE.md — Web-Development
+---
+tags: [claude, Web_Development]
+---
+- This repo holds 3 independent mini-projects (LogIn Page, Restaurant Website/foodio, VPS Production/Server), each with its own package.json — cd into the right one before running commands.
 
-- Foodio (`Restaurant Website/foodio/`): `npm run dev` (Next.js dev), `npm run build`, `npm run start` (from its `package.json` scripts).
-- VPS Production Server (`VPS Production/Server/`): `npm start` runs `node index.js` (from its `package.json` scripts).
-- LogIn Page backend (`LogIn Page/`): no npm scripts defined besides a placeholder `test`; run with `node backend/server.js`.
-- `VPS Production/Server/index.js` uses ESM (`"type": "module"` in its package.json) — use `import`, not `require`, in that project.
-- `LogIn Page/backend/server.js` uses CommonJS (`require`) — do not mix module syntax there.
-- Three independent sub-projects with separate `package.json`/lockfiles — install and run each from its own directory, not the repo root.
+## Build / run
+- LogIn Page backend: `node backend/server.js` (from `LogIn Page/`) — no npm scripts defined besides a placeholder `test`.
+- Foodio dev: `npm run dev` (from `Restaurant Website/foodio/`) — runs `next dev`.
+- Foodio build: `npm run build` (from `Restaurant Website/foodio/`) — runs `next build`.
+- Foodio start: `npm start` (from `Restaurant Website/foodio/`) — runs `next start`.
+- VPS Production Server start: `npm start` (from `VPS Production/Server/`) — runs `node index.js`.
 
-Files worth reading first:
-- `README.md`
-- `Restaurant Website/foodio/package.json`
-- `Restaurant Website/foodio/app/page.tsx`
+## Rules observed
+- `LogIn Page/backend/server.js` is CommonJS (`require`); `VPS Production/Server/index.js` is ESM (`"type": "module"` in its package.json) — don't mix syntax when editing either.
+
+## Read first
+1. `README.md` — describes the 3 sub-projects and how to run each.
+2. `Restaurant Website/foodio/app/layout.tsx` — Foodio root layout (fonts, CartProvider).
+3. `VPS Production/Server/index.js` — Express server pattern reused across the repo's backends.
 
 Architecture: see ARCHITECTURE.md — read before structural changes

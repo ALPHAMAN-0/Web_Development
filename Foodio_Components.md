@@ -1,7 +1,7 @@
 ---
-tags: [component, Web-Development]
+tags: [component, Web_Development]
 ---
-- Path: `Restaurant Website/foodio/components/` (incl. `components/admin/`)
-- Role: React UI components (Navbar, HeroSection, FoodCard, CartModal, CartContext, admin widgets, etc.)
-- Talks to: [[Foodio_App]]
+- Path: `Restaurant Website/foodio/components/`
+- Role: React components (Navbar, HeroSection, FoodCard, CartContext, admin/, etc.) imported via `@/components/...` alias
+- Talks to: 
 - Back: [[ARCHITECTURE]]

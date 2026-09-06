@@ -1,54 +1,62 @@
 ---
-tags: [architecture, Web-Development]
+tags: [architecture, Web_Development]
 ---
 
-## Stack
-Multi-project learning monorepo, no shared root manifest. Three independent sub-projects:
-- `LogIn Page/`: static HTML/CSS frontend + Node.js/Express backend (package.json).
-- `Restaurant Website/foodio/`: Next.js 16 (App Router) + React 19 + TypeScript + Tailwind CSS 4 + framer-motion.
-- `VPS Production/Server/`: Node.js/Express server (ESM, `"type": "module"`).
+## 1. Stack
+- Repo is a "100 Days of Web Development" learning collection of 3 independent mini-projects (README.md).
+- LogIn Page: static HTML/CSS frontend + Node.js/Express backend (CommonJS, `require`).
+- Restaurant Website/foodio: Next.js 16 (App Router) + React 19 + TypeScript + Tailwind CSS 4 + Framer Motion.
+- VPS Production/Server: standalone Node.js/Express server (ESM, `"type": "module"`).
+- No shared build tooling between the three projects — each has its own package.json.
 
-## Directory map
+## 2. Directory map
 | path | what lives there |
 |---|---|
-| `LogIn Page/` | static login frontend (`index.html`, `style.css`) |
+| `LogIn Page/` | Static HTML/CSS login form (`index.html`, `style.css`) |
 | `LogIn Page/backend/` | Express backend server (`server.js`) |
-| `Restaurant Website/foodio/` | Next.js restaurant web app root |
-| `Restaurant Website/foodio/app/` | App Router routes: `page.tsx`, `layout.tsx`, `food-menu/`, `admin/`, `my-orders/`, `sign-in/` |
-| `Restaurant Website/foodio/components/` | React UI components incl. `admin/` subfolder |
-| `Restaurant Website/foodio/public/`, `Restaurant Website/foodio/data/` | static assets and data files |
-| `Restaurant Website/Imagee/` | image assets for the restaurant site (marketing/README use) |
-| `VPS Production/Server/` | standalone Express server (`index.js`) for VPS deployment |
-| `README.md` | repo-level description of the 100-day learning plan |
+| `Restaurant Website/` | Foodio Next.js app + reference images (`Imagee/`) + project-local CLAUDE.md/MEMORY.md |
+| `Restaurant Website/foodio/` | Next.js 16 App Router project root (`app/`, `components/`, `data/`, `public/`) |
+| `VPS Production/` | VPS deployment mini-project |
+| `VPS Production/Server/` | Express server for production hosting (`index.js`) |
 
-## Diagram
+## 3. Diagram
 ```mermaid
 flowchart TD
-    LogIn_Frontend --> LogIn_Backend
-    Foodio_App --> Foodio_Components
-    VPS_Server
+  LPF["LogIn Page Frontend"]
+  LPB["LogIn Page Backend"]
+  FAR["Foodio App Router"]
+  FC["Foodio Components"]
+  FD["Foodio Data"]
+  VPS["VPS Production Server"]
+
+  FAR --> FC
 ```
 
-## Component index
-- [[LogIn_Frontend]]
-- [[LogIn_Backend]]
-- [[Foodio_App]]
-- [[Foodio_Components]]
-- [[VPS_Server]]
+## 4. Component index
+- [[LogIn Page Frontend]]
+- [[LogIn Page Backend]]
+- [[Foodio App Router]]
+- [[Foodio Components]]
+- [[Foodio Data]]
+- [[VPS Production Server]]
 
-## Entry points
-- LogIn Page dev/prod: open `LogIn Page/index.html` in browser; backend via `node backend/server.js` (per README) — file at `LogIn Page/backend/server.js`, listens on port 3001.
-- Foodio dev: `next dev` (from `Restaurant Website/foodio/package.json` scripts), entry `Restaurant Website/foodio/app/page.tsx` / `Restaurant Website/foodio/app/layout.tsx`. Prod: `next build` then `next start`.
-- VPS Production dev/prod: `node index.js` (script `start`) at `VPS Production/Server/index.js`, listens on `process.env.PORT`.
+## 5. Entry points
+- LogIn Page frontend (dev): open `LogIn Page/index.html` directly in a browser (README.md — no dev server).
+- LogIn Page backend (dev/prod): `node backend/server.js` from `LogIn Page/` (README.md; no npm script defined — package.json only has a placeholder `test` script). Listens on port 3001 (server.js).
+- Foodio (dev): `npm run dev` from `Restaurant Website/foodio/` → runs `next dev` (foodio/package.json), serves `http://localhost:3000` (README.md). Root entry: `Restaurant Website/foodio/app/layout.tsx` + `app/page.tsx`.
+- Foodio (prod): `npm run build` then `npm start` from `Restaurant Website/foodio/` → `next build` / `next start` (foodio/package.json).
+- VPS Production Server (start): `npm start` from `VPS Production/Server/` → `node index.js` (Server/package.json). Listens on `process.env.PORT` (index.js) — TODO: verify (`.env` out of scope).
 
-## Conventions
-- LogIn Page backend uses CommonJS (`require`), VPS Production server uses ESM (`import`, `"type": "module"` in its package.json) — observed directly in each file.
-- Foodio app uses Next.js App Router file convention: each route is a folder under `app/` with a `page.tsx` (e.g. `app/food-menu/page.tsx`, `app/sign-in/page.tsx`), and `app/admin/` has its own `layout.tsx`.
-- Foodio components live flat in `components/`, except admin-specific ones grouped under `components/admin/`.
+## 6. Conventions
+- LogIn Page backend uses CommonJS (`require(...)`, no `"type"` field in package.json) — server.js.
+- VPS Production/Server uses ES modules (`import ...`, `"type": "module"` in package.json) — index.js.
+- Both Express servers (LogIn Page backend, VPS Production Server) follow the same shape: `cors()` + `express.json()` middleware, then a `GET /` health-check route returning a plain string — observed identically in both server.js and index.js.
+- Foodio imports use the `@/` path alias (e.g. `@/components/Navbar`, `@/components/CartContext`) — observed in app/page.tsx and app/layout.tsx.
+- Foodio root layout (`app/layout.tsx`) loads Google fonts via `next/font/google` (Playfair Display, Inter) and wraps `children` in `CartProvider` from `@/components/CartContext`.
 
-## Where things go
-- To add a new LogIn Page frontend field/behavior: edit `LogIn Page/index.html` and `LogIn Page/style.css`.
-- To add a new LogIn Page backend route: edit `LogIn Page/backend/server.js`.
-- To add a new Foodio page/route: add a folder with `page.tsx` under `Restaurant Website/foodio/app/`.
-- To add a new Foodio UI piece: add a component to `Restaurant Website/foodio/components/` (or `components/admin/` for admin-only UI).
-- To add a new VPS Production API route: edit `VPS Production/Server/index.js`.
+## 7. Where things go
+- New Foodio page/route → new folder under `Restaurant Website/foodio/app/` with its own `page.tsx` (App Router convention observed: `app/page.tsx`, plus existing `food-menu/`, `admin/`, `my-orders/`, `sign-in/` route folders).
+- New Foodio UI piece → add a `.tsx` file to `Restaurant Website/foodio/components/` and import it via the `@/components/...` alias (pattern observed in app/page.tsx, app/layout.tsx).
+- New LogIn Page backend route → edit `LogIn Page/backend/server.js` (Express `app.get`/`app.use` pattern already there).
+- New VPS Production route → edit `VPS Production/Server/index.js` (Express `app.get` pattern already there, e.g. the `/login` route).
+- LogIn Page frontend styling change → edit `LogIn Page/style.css` (linked from `index.html`).
