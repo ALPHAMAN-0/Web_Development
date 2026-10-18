@@ -2,6 +2,21 @@
 
 A structured learning repository documenting a 100-day web development journey. Covers front-end and back-end development with real-world projects including a login system, a restaurant website built with Next.js, and VPS production deployment.
 
+## Architecture / How it Works
+
+```mermaid
+flowchart TD
+  LPF["LogIn Page Frontend"]
+  LPB["LogIn Page Backend"]
+  FAR["Foodio App Router"]
+  FC["Foodio Components"]
+  FD["Foodio Data"]
+  VPS["VPS Production Server"]
+
+  FAR --> FC
+```
+
+
 ---
 
 ## Contents
